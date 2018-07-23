@@ -79,7 +79,8 @@ class GenerateSentences:
             new_state = np.random.choice(np.array(list(self.word_counts.keys())), 1, p=p)
             sentence += (new_state[0] + ' ')
             state = new_state[0]
-        return sentence[:-1] + '.'
+        sentence = sentence[0].upper() + sentence[1:-1] + '.'
+        return sentence
 
 
 GenerateSentences().main()
