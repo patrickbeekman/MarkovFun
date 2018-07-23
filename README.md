@@ -21,3 +21,6 @@ This program simply creates a markov chain from a list of sentences and then cyc
 - The river loves the chicken crossed the cow jumped over the night sky.
 - The river loves the stream.
 - The night sky.
+- The human shivered in the moon.
+- The river loves the moon.
+
