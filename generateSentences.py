@@ -7,8 +7,14 @@ class GenerateSentences:
     def __init__(self):
         self.word_counts = {}
         self.training = ['The cow jumped over the moon',
-                        'The chicken crossed the road',
-                        'The human skipped over the stream']
+                         'The chicken crossed the road',
+                         'The human skipped over the stream',
+                         'The river loves the mountain',
+                         'The horses ride on rainbows',
+                         'The mushrooms dance in the rain',
+                         'The mushrooms skipped over the river',
+                         'The fireflies crossed the night sky',
+                         'The human shivered in the grass as the wind blew']
         self.state_matrix = None
         self.row_totals = {}
 
@@ -66,8 +72,8 @@ class GenerateSentences:
 
 
     def generate_sentence(self, state='the'):
-        sentence = ''
-        while sum(self.state_matrix.loc[state]) != 0:
+        sentence = state + ' '
+        while sum(self.state_matrix.loc[state]) != 0 and len(sentence.split(' ')) <= 15:
             p = np.array(self.state_matrix.loc[state])
             p /= sum(p) # normalized
             new_state = np.random.choice(np.array(list(self.word_counts.keys())), 1, p=p)
