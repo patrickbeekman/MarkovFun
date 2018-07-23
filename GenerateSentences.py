@@ -20,6 +20,7 @@ class GenerateSentences:
 
 
     def main(self):
+        self.read_text_file('/home/patt/Documents/MarkovFun/OhThePlacesYoullGo-Seus.txt')
         self.count_unique()
         unique_size = len(self.word_counts.keys())
         # initialize pandas to 0s and add row/column labels with word_counts keys
@@ -81,6 +82,15 @@ class GenerateSentences:
             state = new_state[0]
         sentence = sentence[0].upper() + sentence[1:-1] + '.'
         return sentence
+
+    def read_text_file(self, filepath):
+        self.training = []
+        with open(filepath, 'r') as file:
+            tmp_lines = file.readlines()
+        for line in tmp_lines:
+            stripped = line.rstrip('\n').replace('!', '').replace('?', '').replace('...', ' ').replace(',', '').replace('.', '').replace('(', '').replace(')', '')
+            if len(stripped) >= 1:
+                self.training.append(stripped)
 
 
 GenerateSentences().main()
