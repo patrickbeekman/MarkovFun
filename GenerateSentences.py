@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import sys
 
 
 class GenerateSentences:
@@ -30,8 +31,10 @@ class GenerateSentences:
         self.initialize_states()
         self.count_row_totals()
         self.build_state_matrix()
-        for i in range(10):
-            print(self.generate_sentence())
+        top_words = sorted(self.word_counts.items(), key=lambda kv: kv[1], reverse=True)
+        len_words = len(top_words)
+        for i in range(int(sys.argv[1])):
+            print(self.generate_sentence(state=top_words[i%len_words][0]))
 
 
     def count_unique(self):
