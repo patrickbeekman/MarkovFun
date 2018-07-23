@@ -24,3 +24,19 @@ This program simply creates a markov chain from a list of sentences and then cyc
 - The human shivered in the moon.
 - The river loves the moon.
 
+---
+
+I Then experimented by using the whole text of [Dr. Seuss's Oh the places you'll go](http://denuccio.net/ohplaces.html)!
+
+#### Output:
+- The guy who'll decide where to your day.
+- The waiting and frequently do you will go you may not in for a slump.
+- The road between hither and on and you the high heights.
+- The weather be best of town.
+- The great places you'll get so confused.
+- The places you'll start in your shoes full of course.
+- The places you'll play lonely games too smart to your elbow and the whole wide.
+- The great tact.
+- The lead.
+- The great places you'll go on and the best of the rain to stay out.
+
