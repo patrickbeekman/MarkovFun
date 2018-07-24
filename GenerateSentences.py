@@ -11,20 +11,25 @@ class GenerateSentences:
         self.state_matrix = None
         self.row_totals = {}
 
-    def main(self, all_text=[]):
+    def main(self, all_text=[], new_matrix=False):
         print("Starting generator")
         #self.read_text_file('/home/patt/Documents/MarkovFun/OhThePlacesYoullGo-Seus.txt')
-        self.training = all_text
-        unique_size = self.count_unique()
-        print("Unique words: " + unique_size)
-        # initialize pandas to 0s and add row/column labels with word_counts keys
-        zeros = np.zeros((unique_size, unique_size))
-        self.state_matrix = pd.DataFrame(zeros, index=self.word_counts.keys(),
-                                         columns=self.word_counts.keys())
-        self.initialize_states()
-        self.count_row_totals()
-        self.build_state_matrix()
-        print("State Matrix built")
+        if new_matrix:
+            self.training = all_text
+            unique_size = self.count_unique()
+            print("Unique words: " + str(unique_size))
+            # initialize pandas to 0s and add row/column labels with word_counts keys
+            zeros = np.zeros((unique_size, unique_size))
+            self.state_matrix = pd.DataFrame(zeros, index=self.word_counts.keys(),
+                                             columns=self.word_counts.keys())
+            self.initialize_states()
+            self.count_row_totals()
+            self.build_state_matrix()
+            print("State Matrix built")
+            self.save_state_matrix('/home/patt/Documents/MarkovFun/data/state_matrix.pkl')
+        else:
+            self.state_matrix = self.load_state_matrix('/home/patt/Documents/MarkovFun/data/state_matrix.pkl')
+
         top_words = sorted(self.word_counts.items(), key=lambda kv: kv[1], reverse=True)
         len_words = len(top_words)
         print("Generating the sentences.")
@@ -79,6 +84,12 @@ class GenerateSentences:
             state = new_state[0]
         sentence = sentence[0].upper() + sentence[1:-1] + '.'
         return sentence
+
+    def save_state_matrix(self, filepath):
+        self.state_matrix.to_pickle(filepath)
+
+    def load_state_matrix(self, filepath):
+        return pd.read_pickle(filepath)
 
     def read_text_file(self, filepath):
         self.training = []
