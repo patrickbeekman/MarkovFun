@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import sys
+from tqdm import tqdm
 
 
 class GenerateSentences:
@@ -39,7 +40,7 @@ class GenerateSentences:
         return generated_sentences
 
     def count_unique(self):
-        for sentence in self.training:
+        for sentence in tqdm(self.training):
             words = sentence.lower().split(' ')
             for word in words:
                 try:
@@ -50,7 +51,7 @@ class GenerateSentences:
 
     def initialize_states(self):
         print("Initializing states matrix")
-        for sentence in self.training:
+        for sentence in tqdm(self.training):
             words = sentence.lower().split(' ')
             for i, word in enumerate(words):
                 try:
@@ -60,19 +61,22 @@ class GenerateSentences:
                 self.state_matrix.loc[word][next_word] = 999
 
     def build_state_matrix(self):
-        for word_x in self.word_counts.keys():
-            for word_y in self.word_counts.keys():
+        print("Starting to build state matrix")
+        for word_x in tqdm(self.word_counts.keys()):
+            for word_y in tqdm(self.word_counts.keys()):
                 if int(self.state_matrix.loc[word_x][word_y]) == 999:
                     self.state_matrix.loc[word_x][word_y] = self.word_counts[word_y]/self.row_totals[word_x]
 
     def count_row_totals(self):
-        for word_x in self.word_counts.keys():
-            for word_y in self.word_counts.keys():
+        print("Staring to count row totals")
+        for word_x in tqdm(self.word_counts.keys()):
+            for word_y in tqdm(self.word_counts.keys()):
                 if int(self.state_matrix.loc[word_x][word_y]) == 999:
                     try:
                         self.row_totals[word_x] += self.word_counts[word_y]
                     except KeyError:
                         self.row_totals[word_x] = self.word_counts[word_y]
+        print("Done counting row totals")
 
     def generate_sentence(self, state='the'):
         sentence = state + ' '
