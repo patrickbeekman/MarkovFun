@@ -62,6 +62,8 @@ class GenerateSentences:
 
     def build_state_matrix(self):
         print("Starting to build state matrix")
+        
+
         for word_x in tqdm(self.word_counts.keys()):
             for word_y in tqdm(self.word_counts.keys()):
                 if int(self.state_matrix.loc[word_x][word_y]) == 999:
@@ -69,13 +71,19 @@ class GenerateSentences:
 
     def count_row_totals(self):
         print("Staring to count row totals")
-        for word_x in tqdm(self.word_counts.keys()):
-            for word_y in tqdm(self.word_counts.keys()):
-                if int(self.state_matrix.loc[word_x][word_y]) == 999:
-                    try:
-                        self.row_totals[word_x] += self.word_counts[word_y]
-                    except KeyError:
-                        self.row_totals[word_x] = self.word_counts[word_y]
+        # sum up the rows by creating a boolean list of the row that is 999
+        # sum up the word counts using the boolean list to index
+        for word in tqdm(self.word_counts.keys()):
+            other_states = list(self.state_matrix.loc[word] == 999)
+            self.row_totals[word] = pd.DataFrame(list(self.word_counts.values()))[other_states].sum()
+
+        # for word_x in tqdm(self.word_counts.keys()):
+        #     for word_y in tqdm(self.word_counts.keys()):
+        #         if int(self.state_matrix.loc[word_x][word_y]) == 999:
+        #             try:
+        #                 self.row_totals[word_x] += self.word_counts[word_y]
+        #             except KeyError:
+        #                 self.row_totals[word_x] = self.word_counts[word_y]
         print("Done counting row totals")
 
     def generate_sentence(self, state='the'):

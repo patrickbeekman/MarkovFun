@@ -3,6 +3,7 @@ import tweepy_grabber
 import GenerateSentences
 import pandas as pd
 import os
+import re
 
 class TwitterBot:
 
@@ -38,7 +39,9 @@ class TwitterBot:
         for filepath in filepaths:
             file = pd.read_json(filepath)
             for text in file.iterrows():
-                all_text.append(text[1].loc['text'])
+                tweet_text = re.sub(r'http\S+', '', str(text[1].loc['text']).lower(), flags=re.MULTILINE)
+                tweet_text = tweet_text.strip().replace('\n', '').replace('\r', '').replace('.', '').replace('!', '').replace('?', '')
+                all_text.append(tweet_text)
         return all_text
 
 
