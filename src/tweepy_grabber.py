@@ -11,8 +11,19 @@ import json
 class TweepyGrabber:
     api = None
 
-    def __init__(self, username=os.environ['MARKOV_TWEET_PUB'], password=os.environ['MARKOV_TWEET_PRI']):
-        self.api = self.api_connect(username, password)
+    def __init__(self, username='', password=''):
+        try:
+            self.username = os.environ['MARKOV_TWEET_PUB']
+            self.password = os.environ['MARKOV_TWEET_PRI']
+        except KeyError:
+            abs_path = os.path.dirname(__file__) + "/../keys.txt"
+            if os.path.exists(abs_path):
+                with open(abs_path) as keys:
+                    self.username = keys.readline().strip()
+                    self.password = keys.readline().strip()
+            else:
+                raise InvalidTwitterAppCredentials()
+        self.api = self.api_connect(self.username, self.password)
 
     '''
         Connects to the twitter api taking in a consumer key and secret which can be gotten from
@@ -192,5 +203,8 @@ def main():
 
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
+
+class InvalidTwitterAppCredentials(Exception):
+    pass

@@ -12,11 +12,11 @@ class GenerateSentences:
         self.state_matrix = None
         self.row_totals = {}
 
-    def main(self, all_text=[], new_matrix=False):
+    def main(self, all_text=[], new_matrix=False, num_sentences=1):
         print("Starting generator")
-        #self.read_text_file('/home/patt/Documents/MarkovFun/OhThePlacesYoullGo-Seus.txt')
         if new_matrix:
             self.training = all_text
+            # self.read_text_file('/home/patt/Documents/MarkovFun/OhThePlacesYoullGo-Seus.txt')
             unique_size = self.count_unique()
             print("Unique words: " + str(unique_size))
             # initialize pandas to 0s and add row/column labels with word_counts keys
@@ -35,7 +35,7 @@ class GenerateSentences:
         len_words = len(top_words)
         print("Generating the sentences.")
         generated_sentences = []
-        for i in range(int(sys.argv[1])):
+        for i in range(int(num_sentences)):
             generated_sentences.append(self.generate_sentence(state=top_words[i%len_words][0]))
         return generated_sentences
 
@@ -62,12 +62,16 @@ class GenerateSentences:
 
     def build_state_matrix(self):
         print("Starting to build state matrix")
-        
-
-        for word_x in tqdm(self.word_counts.keys()):
-            for word_y in tqdm(self.word_counts.keys()):
-                if int(self.state_matrix.loc[word_x][word_y]) == 999:
-                    self.state_matrix.loc[word_x][word_y] = self.word_counts[word_y]/self.row_totals[word_x]
+        # Do similar thing
+        # for word_x in tqdm(self.word_counts.keys()):
+        #     for word_y in tqdm(self.word_counts.keys()):
+        #         if int(self.state_matrix.loc[word_x][word_y]) == 999:
+        #             self.state_matrix.loc[word_x][word_y] = self.word_counts[word_y]/self.row_totals[word_x]
+        for word in tqdm(self.word_counts.keys()):
+            other_states = self.state_matrix.loc[word] > 0#== 999)
+            row = self.state_matrix.loc[word][other_states]
+            for index, val in row.iteritems():
+                self.state_matrix.loc[word][index] = self.word_counts[index]/self.row_totals[word]
 
     def count_row_totals(self):
         print("Staring to count row totals")
@@ -111,3 +115,5 @@ class GenerateSentences:
             stripped = line.rstrip('\n').replace('!', '').replace('?', '').replace('...', ' ').replace(',', '').replace('.', '').replace('(', '').replace(')', '')
             if len(stripped) >= 1:
                 self.training.append(stripped)
+
+# GenerateSentences().main(new_matrix=True)
