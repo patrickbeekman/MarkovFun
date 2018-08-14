@@ -65,11 +65,6 @@ class GenerateSentences:
 
     def build_state_matrix(self):
         print("Starting to build state matrix")
-        # Do similar thing
-        # for word_x in tqdm(self.word_counts.keys()):
-        #     for word_y in tqdm(self.word_counts.keys()):
-        #         if int(self.state_matrix.loc[word_x][word_y]) == 999:
-        #             self.state_matrix.loc[word_x][word_y] = self.word_counts[word_y]/self.row_totals[word_x]
         for word in tqdm(self.word_counts.keys()):
             other_states = self.state_matrix.loc[word] > 0#== 999)
             row = self.state_matrix.loc[word][other_states]
@@ -83,14 +78,6 @@ class GenerateSentences:
         for word in tqdm(self.word_counts.keys()):
             other_states = list(self.state_matrix.loc[word] == 999)
             self.row_totals[word] = pd.DataFrame(list(self.word_counts.values()))[other_states].sum()
-
-        # for word_x in tqdm(self.word_counts.keys()):
-        #     for word_y in tqdm(self.word_counts.keys()):
-        #         if int(self.state_matrix.loc[word_x][word_y]) == 999:
-        #             try:
-        #                 self.row_totals[word_x] += self.word_counts[word_y]
-        #             except KeyError:
-        #                 self.row_totals[word_x] = self.word_counts[word_y]
         print("Done counting row totals")
 
     def generate_sentence(self, state='the'):

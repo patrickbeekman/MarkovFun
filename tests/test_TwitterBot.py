@@ -7,8 +7,12 @@ from TwitterBot import TwitterBot
 
 pytest.tb = TwitterBot()
 
+
 def test_choose_unique():
     x = pytest.tb.choose_most_unique(['hello hello hello hello', 'my name is hello'])
-    print(x[:-1])
-    pass
+    assert x[-1][0] == 'my name is hello'
 
+
+def test_choose_unique_empty():
+    x = pytest.tb.choose_most_unique([])
+    assert x == []
