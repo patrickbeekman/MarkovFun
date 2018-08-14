@@ -30,8 +30,10 @@ class TwitterBot:
             generated = self.Generator.main(all_text=all_text, new_matrix=True, num_sentences=15)
         else:
             generated = self.Generator.main(all_text=all_text, new_matrix=False, num_sentences=15)
-        print(generated)
-        print(self.choose_most_unique(generated))
+        #print(generated)
+        top_sentences = self.choose_most_unique(generated)
+        print(top_sentences[0][0])
+        self.Grabber.new_tweet(top_sentences[0][0])
 
     def extract_text(self, filepaths):
         if type(filepaths) is not list:
@@ -49,6 +51,6 @@ class TwitterBot:
         unique_count = {}
         for sentence in sentences:
             unique_count[sentence] = len(set(sentence[:-1].split(" ")))
-        return sorted(unique_count.items(), key=lambda kv: kv[1])[:3]
+        return sorted(unique_count.items(), key=lambda kv: kv[1], reverse=True)[:3]
 
 TwitterBot().main()

@@ -188,6 +188,11 @@ class TweepyGrabber:
             json.dump([tweet._json for tweet in all_tweets], file)
         os.chmod(output_file, 0o777)
 
+    def new_tweet(self, tweet_text):
+        if len(tweet_text) > 280:
+            raise TweetLengthTooLong()
+        self.api.update_status(status=tweet_text)
+
 def main():
     grabber = TweepyGrabber()
     twitter_handle = "patrickbeekman"
@@ -206,5 +211,10 @@ def main():
 # if __name__ == "__main__":
 #     main()
 
+
 class InvalidTwitterAppCredentials(Exception):
+    pass
+
+
+class TweetLengthTooLong(Exception):
     pass
