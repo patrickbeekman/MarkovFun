@@ -41,7 +41,7 @@ class TwitterBot:
             file = pd.read_json(filepath)
             for text in file.iterrows():
                 tweet_text = re.sub(r'http\S+', '', str(text[1].loc['text']).lower(), flags=re.MULTILINE)
-                tweet_text = tweet_text.strip().replace('\n', '').replace('\r', '').replace('.', '').replace('!', '').replace('?', '')
+                tweet_text = tweet_text.strip().replace('\n', '').replace('\r', '').replace('.', '').replace('!', '').replace('?', '').replace('rt', '')
                 all_text.append(tweet_text)
         return all_text
 

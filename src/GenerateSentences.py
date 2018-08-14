@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import sys
 from tqdm import tqdm
+import pickle
 
 
 class GenerateSentences:
@@ -28,8 +29,10 @@ class GenerateSentences:
             self.build_state_matrix()
             print("State Matrix built")
             self.save_state_matrix('/home/patt/Documents/MarkovFun/data/state_matrix.pkl')
+            self.save_word_counts('/home/patt/Documents/MarkovFun/data/word_counts.pkl')
         else:
             self.state_matrix = self.load_state_matrix('/home/patt/Documents/MarkovFun/data/state_matrix.pkl')
+            self.word_counts = self.load_word_counts('/home/patt/Documents/MarkovFun/data/word_counts.pkl')
 
         top_words = sorted(self.word_counts.items(), key=lambda kv: kv[1], reverse=True)
         len_words = len(top_words)
@@ -106,6 +109,14 @@ class GenerateSentences:
 
     def load_state_matrix(self, filepath):
         return pd.read_pickle(filepath)
+
+    def save_word_counts(self, filepath):
+        with open(filepath, 'wb') as f:
+            pickle.dump(self.word_counts, f, pickle.HIGHEST_PROTOCOL)
+
+    def load_word_counts(self, filepath):
+        with open(filepath, 'rb') as f:
+            return pickle.load(f)
 
     def read_text_file(self, filepath):
         self.training = []
