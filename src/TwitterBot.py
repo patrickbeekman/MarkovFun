@@ -5,6 +5,11 @@ import pandas as pd
 import os
 import re
 
+'''
+    Handles the control flow of the application. This connects the tweepy_grabber and the 
+    sentence_generator to use output from twitter as input to generate new sentences which
+    is then displayed as output on twitter in the form of a tweet.
+'''
 class TwitterBot:
 
     def __init__(self):
@@ -30,7 +35,7 @@ class TwitterBot:
             generated = self.Generator.main(all_text=all_text, new_matrix=True, num_sentences=15)
         else:
             generated = self.Generator.main(all_text=all_text, new_matrix=False, num_sentences=15)
-        #print(generated)
+
         top_sentences = self.choose_most_unique(generated)
         print(top_sentences[0][0])
         self.Grabber.new_tweet(top_sentences[0][0])
@@ -43,10 +48,12 @@ class TwitterBot:
             file = pd.read_json(filepath)
             for text in file.iterrows():
                 tweet_text = re.sub(r'http\S+', '', str(text[1].loc['text']).lower(), flags=re.MULTILINE)
+                tweet_text = re.sub(r'@\S+', '', str(text[1].loc['text']).lower(), flags=re.MULTILINE)
                 tweet_text = tweet_text.strip().replace('\n', '').replace('\r', '').replace('.', '').replace('!', '').replace('?', '').replace('rt', '')
                 all_text.append(tweet_text)
         return all_text
 
+    # Chooses the most unique sentence based on how many unique words there are.
     def choose_most_unique(self, sentences):
         unique_count = {}
         for sentence in sentences:
