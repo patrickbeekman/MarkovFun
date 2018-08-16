@@ -49,11 +49,16 @@ class TwitterBot:
         for filepath in filepaths:
             file = pd.read_json(filepath)
             for text in file.iterrows():
-                tweet_text = re.sub(r'http\S+', '', str(text[1].loc['text']).lower(), flags=re.MULTILINE)
-                tweet_text = re.sub(r'@\S+', '', tweet_text, flags=re.MULTILINE)
-                tweet_text = tweet_text.strip().replace('\n', '').replace('\r', '').replace('.', '').replace('!', '').replace('?', '').replace('rt', '')
+                tweet_text = self.clean_text(text[1].loc['text'])
                 all_text.append(tweet_text)
         return all_text
+
+    def clean_text(self, sentence):
+        tweet_text = re.sub(r'http\S+', '', str(sentence).strip().lower(), flags=re.MULTILINE)
+        tweet_text = re.sub(r'@\S+', '', tweet_text, flags=re.MULTILINE)
+        tweet_text = tweet_text.strip().replace('\n', '').replace('\r', '').replace('.', '').replace('!', '').replace(
+            '?', '').replace('rt', '').replace('...', '').replace('.', '')
+        return tweet_text.strip()
 
     # Chooses the most unique sentence based on how many unique words there are.
     def choose_most_unique(self, sentences):
