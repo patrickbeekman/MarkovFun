@@ -32,13 +32,15 @@ class TwitterBot:
 
         all_text = self.extract_text(all_file_paths)
         if old_len != new_len:
-            generated = self.Generator.main(all_text=all_text, new_matrix=True, num_sentences=15)
+            new_matrix=True
         else:
-            generated = self.Generator.main(all_text=all_text, new_matrix=False, num_sentences=15)
+            new_matrix=False
+        generated = self.Generator.main(all_text=all_text, new_matrix=new_matrix, num_sentences=50)
 
         top_sentences = self.choose_most_unique(generated)
         print(top_sentences[0][0])
-        self.Grabber.new_tweet(top_sentences[0][0])
+        print("---------------\n", generated)
+        #self.Grabber.new_tweet(top_sentences[0][0])
 
     def extract_text(self, filepaths):
         if type(filepaths) is not list:
@@ -48,7 +50,7 @@ class TwitterBot:
             file = pd.read_json(filepath)
             for text in file.iterrows():
                 tweet_text = re.sub(r'http\S+', '', str(text[1].loc['text']).lower(), flags=re.MULTILINE)
-                tweet_text = re.sub(r'@\S+', '', str(text[1].loc['text']).lower(), flags=re.MULTILINE)
+                tweet_text = re.sub(r'@\S+', '', tweet_text, flags=re.MULTILINE)
                 tweet_text = tweet_text.strip().replace('\n', '').replace('\r', '').replace('.', '').replace('!', '').replace('?', '').replace('rt', '')
                 all_text.append(tweet_text)
         return all_text
