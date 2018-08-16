@@ -11,27 +11,34 @@ import json
 class TweepyGrabber:
     api = None
 
-    def __init__(self, username='', password=''):
-        try:
-            self.username = os.environ['MARKOV_TWEET_PUB']
-            self.password = os.environ['MARKOV_TWEET_PRI']
-        except KeyError:
-            abs_path = os.path.dirname(__file__) + "/../keys.txt"
-            if os.path.exists(abs_path):
-                with open(abs_path) as keys:
-                    self.username = keys.readline().strip()
-                    self.password = keys.readline().strip()
-            else:
-                raise InvalidTwitterAppCredentials()
-        self.api = self.api_connect(self.username, self.password)
+    def __init__(self, username='', password='', access_pub='', access_pri=''):
+        if username != '' and password != '':
+            self.api = self.api_connect(username, password, access_pub, access_pri)
+            return
+        # try:
+        #     username = os.environ['MARKOV_TWEET_PUB']
+        #     password = os.environ['MARKOV_TWEET_PRI']
+        # except KeyError:
+        abs_path = os.path.dirname(__file__) + "/../keys.txt"
+        if os.path.exists(abs_path):
+            with open(abs_path) as keys:
+                username = keys.readline().strip()
+                password = keys.readline().strip()
+                access_pub = keys.readline().strip()
+                access_pri = keys.readline().strip()
+        else:
+            raise InvalidTwitterAppCredentials()
+        self.api = self.api_connect(username, password, access_pub, access_pri)
 
     '''
         Connects to the twitter api taking in a consumer key and secret which can be gotten from
         creating a twitter app at: https://apps.twitter.com/
     '''
-    def api_connect(self, consumer_key, consumer_secret):
+    def api_connect(self, consumer_key, consumer_secret, access_token, access_token_secret):
         try:
-            auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
+            # auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
+            auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+            auth.set_access_token(access_token, access_token_secret)
         except tweepy.TweepError as e:
             print(e)
             exit(1)
@@ -191,7 +198,7 @@ class TweepyGrabber:
     def new_tweet(self, tweet_text):
         if len(tweet_text) > 280:
             raise TweetLengthTooLong()
-        self.api.update_status(status=tweet_text)
+        self.api.update_status(status=str(tweet_text))
 
 def main():
     grabber = TweepyGrabber()
