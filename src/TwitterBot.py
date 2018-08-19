@@ -38,9 +38,10 @@ class TwitterBot:
         generated = self.Generator.main(all_text=all_text, new_matrix=new_matrix, num_sentences=50)
 
         top_sentences = self.choose_most_unique(generated)
+        print("---------------")
         print(top_sentences[0][0])
-        print("---------------\n", generated)
-        #self.Grabber.new_tweet(top_sentences[0][0])
+        self.Grabber.new_tweet(top_sentences[0][0])
+        os._exit(-1)
 
     def extract_text(self, filepaths):
         if type(filepaths) is not list:
