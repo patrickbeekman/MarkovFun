@@ -1,5 +1,9 @@
 # MarkovFun
-Messing around with Markov Chains
+#####Messing around with Markov Chains
+
+# What are Markov Chains?
+- https://en.wikipedia.org/wiki/Markov_chain
+- http://setosa.io/ev/markov-chains/
 
 ## GenerateSentences.py
 This program simply creates a markov chain from a list of sentences and then cycles through the transition matrix to generate new sentecnes.
