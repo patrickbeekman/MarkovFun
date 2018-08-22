@@ -1,5 +1,5 @@
 # MarkovFun
-#####Messing around with Markov Chains
+#### Messing around with Markov Chains
 
 # What are Markov Chains?
 - https://en.wikipedia.org/wiki/Markov_chain
