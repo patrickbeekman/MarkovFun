@@ -1,6 +1,11 @@
 # MarkovFun
 #### Messing around with Markov Chains
 
+# Twitter bot
+I have also created a simple twitter bot that will generate new tweets based off the tweets of its followers. For example if only my personal twiter account is following the bot then it will use my all of the words in my tweets to generate new tweets. The tweets are still jibberish because they don't follow a sentence structure. The essence of "sentence strucutre" in the tweets is that of a probabilistic reconstruction of the sentence strucutre in the tweets of its followers. The next iteration of this app will be to include some sort of sentence strucuture in my markov chain model.
+
+https://twitter.com/NonsenseMarkov
+
 # What are Markov Chains?
 - https://en.wikipedia.org/wiki/Markov_chain
 - http://setosa.io/ev/markov-chains/
